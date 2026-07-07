@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Crivacy — Confidential Identity (Zama FHE)</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+      h1 { font-size: 1.4rem; }
+      fieldset { border: 1px solid #8884; border-radius: 10px; margin: 1rem 0; padding: 1rem; }
+      legend { font-weight: 600; padding: 0 .4rem; }
+      label { display: block; font-size: .85rem; margin: .5rem 0 .15rem; opacity: .8; }
+      input { width: 100%; padding: .5rem; border-radius: 8px; border: 1px solid #8886; background: transparent; color: inherit; }
+      button { margin-top: .8rem; padding: .55rem 1rem; border: 0; border-radius: 8px; background: #6c5ce7; color: #fff; font-weight: 600; cursor: pointer; }
+      button:hover { background: #574bd6; }
+      #log { white-space: pre-wrap; background: #0002; border-radius: 8px; padding: .8rem; font-family: ui-monospace, monospace; font-size: .8rem; height: 200px; overflow: auto; margin-top: 1rem; }
+      code { background: #8882; padding: .1rem .3rem; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <h1>🔐 Confidential Identity — Zama FHE</h1>
+    <p>Prove <em>"I'm over 18"</em> or <em>"I'm not from country X"</em> without revealing your age or nationality. Age & country are encrypted in your browser; only a boolean result is ever decryptable, by a verifier you choose.</p>
+
+    <p>Connected: <code id="account">—</code></p>
+    <button id="btnConnect">Connect wallet (Sepolia)</button>
+
+    <fieldset>
+      <legend>1 · Register encrypted identity</legend>
+      <label>Age</label>
+      <input id="age" type="number" value="25" min="0" max="255" />
+      <label>Country code (ISO-3166 numeric, e.g. 792=TR, 840=US)</label>
+      <input id="country" type="number" value="792" min="0" max="65535" />
+      <button id="btnRegister">Encrypt & register</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>2 · Issue an age attestation</legend>
+      <label>Minimum age threshold</label>
+      <input id="threshold" type="number" value="18" min="0" max="255" />
+      <label>Verifier address (blank = yourself)</label>
+      <input id="verifier" type="text" placeholder="0x…" />
+      <button id="btnAttest">Attest age ≥ threshold</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>3 · Decrypt an attestation</legend>
+      <label>Identity owner address (blank = yourself)</label>
+      <input id="owner" type="text" placeholder="0x…" />
+      <button id="btnDecrypt">Decrypt boolean result</button>
+    </fieldset>
+
+    <pre id="log">Ready. Connect your wallet to begin.</pre>
+
+    <script src="./vendor/ethers.umd.min.js"></script>
+    <script src="./vendor/relayer-sdk.umd.js"></script>
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

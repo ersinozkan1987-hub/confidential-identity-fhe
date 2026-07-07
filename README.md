@@ -46,6 +46,22 @@ npm run deploy:sepolia
 registration, age attestation (true/false), sanctioned-country exclusion
 (true/false), verifier-scoped decryption, and the no-identity revert.
 
+## Frontend (browser dApp)
+
+A zero-build, self-contained demo UI lives in [`frontend/`](frontend/). It encrypts
+age/country in the browser with `@zama-fhe/relayer-sdk`, registers the identity,
+issues an attestation, and decrypts the boolean via an EIP-712 user-decrypt request.
+
+```bash
+# 1. Deploy to Sepolia and copy the printed address into frontend/config.js
+# 2. Serve the folder (any static server):
+npx serve frontend
+```
+
+> The UI runs against a **live Sepolia deployment** — set `contractAddress` in
+> `frontend/config.js` first. The relayer SDK + wasm are vendored under
+> `frontend/vendor/` so no CDN is needed.
+
 ## Roadmap ideas
 
 - ERC-7984 confidential attestation token (portable "verified adult" badge).
