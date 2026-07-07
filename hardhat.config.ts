@@ -1,3 +1,4 @@
+import "dotenv/config";
 import "@fhevm/hardhat-plugin";
 import "@nomicfoundation/hardhat-chai-matchers";
 import "@nomicfoundation/hardhat-ethers";
@@ -14,8 +15,12 @@ import "./tasks/FHECounter";
 
 // Run 'npx hardhat vars setup' to see the list of variables that need to be set
 
-const MNEMONIC: string = vars.get("MNEMONIC", "test test test test test test test test test test test junk");
-const INFURA_API_KEY: string = vars.get("INFURA_API_KEY", "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+// Prefer .env (managed for you) but fall back to `hardhat vars` if you set them manually.
+const MNEMONIC: string =
+  process.env.MNEMONIC ?? vars.get("MNEMONIC", "test test test test test test test test test test test junk");
+// Public Sepolia RPC — no API key needed. Override with your own via SEPOLIA_RPC_URL if you like.
+const SEPOLIA_RPC_URL: string =
+  process.env.SEPOLIA_RPC_URL ?? vars.get("SEPOLIA_RPC_URL", "https://ethereum-sepolia-rpc.publicnode.com");
 
 const config: HardhatUserConfig = {
   defaultNetwork: "hardhat",
@@ -55,7 +60,7 @@ const config: HardhatUserConfig = {
         count: 10,
       },
       chainId: 11155111,
-      url: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`,
+      url: SEPOLIA_RPC_URL,
     },
   },
   paths: {
