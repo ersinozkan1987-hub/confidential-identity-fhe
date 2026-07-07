@@ -8,7 +8,7 @@ so comparisons run over encrypted data on-chain.
 Built on the [Zama FHEVM](https://github.com/zama-ai/fhevm) Hardhat template.
 Candidate for the [Zama Developer Program — Builder Track](https://www.zama.org/programs/developer-program).
 
-**🟢 Live on Sepolia:** [`0x349bf00b6E29538A9c6F7D1F18cD8C48f7f94870`](https://sepolia.etherscan.io/address/0x349bf00b6E29538A9c6F7D1F18cD8C48f7f94870)
+**🟢 Live & verified on Sepolia:** [`0x349bf00b6E29538A9c6F7D1F18cD8C48f7f94870`](https://sepolia.etherscan.io/address/0x349bf00b6E29538A9c6F7D1F18cD8C48f7f94870#code)
 
 ## How it works
 

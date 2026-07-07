@@ -28,9 +28,8 @@ const config: HardhatUserConfig = {
     deployer: 0,
   },
   etherscan: {
-    apiKey: {
-      sepolia: process.env.ETHERSCAN_API_KEY ?? vars.get("ETHERSCAN_API_KEY", ""),
-    },
+    // Etherscan V2 uses a single multichain API key (string), not a per-network map.
+    apiKey: process.env.ETHERSCAN_API_KEY ?? vars.get("ETHERSCAN_API_KEY", ""),
   },
   gasReporter: {
     currency: "USD",

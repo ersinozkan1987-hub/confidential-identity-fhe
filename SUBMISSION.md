@@ -42,7 +42,7 @@ Core logic: [`contracts/ConfidentialIdentity.sol`](contracts/ConfidentialIdentit
 
 ## Status — working end to end
 
-- ✅ Contract deployed and live on Sepolia.
+- ✅ Contract deployed, live, and [verified on Sepolia Etherscan](https://sepolia.etherscan.io/address/0x349bf00b6E29538A9c6F7D1F18cD8C48f7f94870#code).
 - ✅ Full round-trip proven on-chain: browser encrypt → `registerIdentity` →
   `attestMinimumAge` → EIP-712 `userDecrypt` → `attestation = true`.
 - ✅ 7 passing Hardhat tests on the FHEVM mock (`test/ConfidentialIdentity.ts`):
