@@ -1,7 +1,7 @@
 // Fill this in after you deploy to Sepolia (npm run deploy:sepolia prints the address).
 window.APP_CONFIG = {
   // ConfidentialIdentity contract address on Sepolia:
-  contractAddress: "0x0000000000000000000000000000000000000000",
+  contractAddress: "0x349bf00b6E29538A9c6F7D1F18cD8C48f7f94870",
   chainIdHex: "0xaa36a7", // 11155111 Sepolia
 };
 
