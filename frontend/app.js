@@ -56,10 +56,22 @@ async function connect() {
   log("✅ FHE instance ready.");
 }
 
+function requireReady() {
+  if (!instance || !contract) {
+    throw new Error("FHE not ready yet — click Connect and wait for '✅ FHE instance ready'.");
+  }
+}
+
+// Let the browser paint the latest log line before a heavy, main-thread call.
+const yieldToUI = () => new Promise((r) => setTimeout(r, 60));
+
 async function register() {
+  requireReady();
   const age = parseInt($("age").value, 10);
   const country = parseInt($("country").value, 10);
   log(`⏳ Encrypting age=${age}, country=${country} in the browser…`);
+  log("🔐 Generating the FHE proof — the tab may freeze for ~10–20s. This is normal.");
+  await yieldToUI();
 
   const enc = await instance
     .createEncryptedInput(window.APP_CONFIG.contractAddress, account)
@@ -74,6 +86,7 @@ async function register() {
 }
 
 async function attestAge() {
+  requireReady();
   const threshold = parseInt($("threshold").value, 10);
   const verifier = $("verifier").value.trim() || account;
   log(`⏳ Attesting age ≥ ${threshold} for verifier ${verifier}…`);
@@ -83,6 +96,7 @@ async function attestAge() {
 }
 
 async function decryptAttestation() {
+  requireReady();
   const owner = $("owner").value.trim() || account;
   log(`⏳ Reading attestation handle for ${owner}…`);
   const handle = await contract.getAttestation(owner);
@@ -118,7 +132,24 @@ async function decryptAttestation() {
   log(`🔓 Decrypted attestation = ${value} (true = passes the check)`);
 }
 
-$("btnConnect").onclick = () => connect().catch((e) => log("❌ " + (e.message || e)));
-$("btnRegister").onclick = () => register().catch((e) => log("❌ " + (e.message || e)));
-$("btnAttest").onclick = () => attestAge().catch((e) => log("❌ " + (e.message || e)));
-$("btnDecrypt").onclick = () => decryptAttestation().catch((e) => log("❌ " + (e.message || e)));
+const BTN_IDS = ["btnConnect", "btnRegister", "btnAttest", "btnDecrypt"];
+
+// Disable every button while an action runs, so nothing is clicked before the
+// FHE instance is ready or while a proof/tx is in flight.
+function wire(id, fn) {
+  $(id).onclick = async () => {
+    BTN_IDS.forEach((b) => ($(b).disabled = true));
+    try {
+      await fn();
+    } catch (e) {
+      log("❌ " + (e.message || e));
+    } finally {
+      BTN_IDS.forEach((b) => ($(b).disabled = false));
+    }
+  };
+}
+
+wire("btnConnect", connect);
+wire("btnRegister", register);
+wire("btnAttest", attestAge);
+wire("btnDecrypt", decryptAttestation);
