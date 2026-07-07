@@ -22,26 +22,33 @@ let signer, provider, contract, instance, account;
 
 async function connect() {
   if (!window.ethereum) return log("❌ MetaMask not found.");
-  provider = new ethers.BrowserProvider(window.ethereum);
-  await provider.send("eth_requestAccounts", []);
 
-  const net = await provider.getNetwork();
-  if (net.chainId !== 11155111n) {
+  // 1) Ensure we're on Sepolia BEFORE building the provider, otherwise ethers v6
+  //    throws NETWORK_ERROR ("network changed 1 => 11155111") mid-flight.
+  await window.ethereum.request({ method: "eth_requestAccounts" });
+  const chainId = await window.ethereum.request({ method: "eth_chainId" });
+  if (chainId !== window.APP_CONFIG.chainIdHex) {
     try {
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: window.APP_CONFIG.chainIdHex }],
       });
     } catch {
-      return log("❌ Please switch MetaMask to Sepolia.");
+      return log("❌ Please switch MetaMask to Sepolia, then click Connect again.");
     }
   }
 
+  // 2) Build the provider now that the wallet is on the right network.
+  provider = new ethers.BrowserProvider(window.ethereum);
   signer = await provider.getSigner();
   account = await signer.getAddress();
   contract = new ethers.Contract(window.APP_CONFIG.contractAddress, window.CONTRACT_ABI, signer);
   $("account").textContent = account;
   log(`✅ Connected: ${account}`);
+
+  // Reload on network/account change to avoid stale provider errors.
+  window.ethereum.on?.("chainChanged", () => location.reload());
+  window.ethereum.on?.("accountsChanged", () => location.reload());
 
   log("⏳ Initializing FHE SDK (loading wasm)…");
   await SDK.initSDK();
