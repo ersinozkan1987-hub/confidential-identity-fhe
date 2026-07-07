@@ -90,8 +90,8 @@ async function decryptAttestation() {
 
   // Build a user-decrypt request signed via EIP-712 (canonical Zama flow).
   const keypair = instance.generateKeypair();
-  const start = Math.floor(Date.now() / 1000).toString();
-  const days = "1";
+  const start = Math.floor(Date.now() / 1000); // number — the SDK expects a UintNumber, not a string
+  const days = 1; // number
   const contracts = [window.APP_CONFIG.contractAddress];
   const eip712 = instance.createEIP712(keypair.publicKey, contracts, start, days);
 
