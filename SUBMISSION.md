@@ -66,4 +66,4 @@ npx serve frontend                               # connect MetaMask on Sepolia
 - Batch predicates (age + region + accreditation) in a single call.
 - Worker-based encryption for a non-blocking UI.
 
-Built by [@UfukDegen](https://x.com/UfukDegen).
+Built by [@yedisekizbir](https://x.com/yedisekizbir).
